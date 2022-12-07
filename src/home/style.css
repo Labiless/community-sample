@@ -1,5 +1,6 @@
-@import url('module-style-test.css');
-
 body{
     background-color: rgb(67, 165, 223);
+}
+h1{
+    margin: auto;
 }
