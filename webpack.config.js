@@ -32,5 +32,13 @@ module.exports = {
         filename: '[name]/index.bundle.js',
         clean: true
     },
-    plugins
+    plugins,
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+        ],
+    },
 };
