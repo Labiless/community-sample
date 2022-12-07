@@ -8,7 +8,10 @@ dist
     |_pageName.bundle.js
     |_pageName.bundle.css
 src
-|_pageName
+|_shared (file used in more than one page)
+    |_js
+    |_css
+|_pageName (single page)
     |_index.js
     |_style.css
 server
