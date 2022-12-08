@@ -1,30 +1,23 @@
-const port = 8080;
-
-const { json } = require('express');
-//http server setup
-const express = require('express');
-const app = express();
-var http = require("http");
-var server = http.createServer(app);
-
-//web scoket setup
 const WebSocket = require('ws');
-const wss = new WebSocket.WebSocketServer({ 
-    port
-});
 
-//start server
-//server.listen(port);
-
-//WEBSOCKET
+let wss;
 const allConncetion = {};
-wss.on('connection', (ws) => {
-    console.log("New connection request...");
-    ws.on('message', (message) => onMessage(message, ws));
-});
+
+const start = (server) => {
+    wss = new WebSocket.WebSocketServer({ server });
+    wss.on('listening', ()=>{
+        console.log("WS server runnig on port " + wss.address().port);
+    });
+    wss.on('connection', (ws) => {
+        console.log("New connection request...");
+        ws.on('message', (message) => onMessage(message, ws));
+    });
+}
+
 const onMessage = (message, ws) => {
     performMessageAction(JSON.parse(message.toString()), ws);
 }
+
 const sendMessage = (ws, message) => {
     try {
         ws.send(JSON.stringify(message));
@@ -32,6 +25,7 @@ const sendMessage = (ws, message) => {
         console.log("error send message")
     }
 }
+
 const performMessageAction = (message, ws) => {
     switch (message.code) {
         case "openConnection":
@@ -41,7 +35,7 @@ const performMessageAction = (message, ws) => {
             break;
         case "test":
             console.log("test message: " + message.body);
-            sendMessage(ws, {code: "test", body: "test message"})
+            sendMessage(ws, { code: "test", body: "test message" })
         case "keepAlive":
             sendMessage(allConncetion["head"], JSON.stringify(message));
             break;
@@ -53,3 +47,5 @@ const performMessageAction = (message, ws) => {
             break;
     }
 }
+
+module.exports = { start };

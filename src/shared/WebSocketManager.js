@@ -17,7 +17,7 @@ const webSocketManager = ()=>({
     ready : false,
     init : function(data){
         this.id = data?.id || uuidv4();
-        this.url = data?.url || "ws://localhost:8080";
+        this.url = data?.url || "ws://localhost:3000";
         this.socket = new WebSocket(this.url);
         this.socket.onopen = () => {
             console.log("Opening WS connection...")
@@ -26,7 +26,7 @@ const webSocketManager = ()=>({
         this.socket.onmessage = (message) => {
             const parsedMessage = JSON.parse(message.data)
             this.onMessage(parsedMessage);
-            if(data.onMessage){
+            if(data?.onMessage){
                 data.onMessage(parsedMessage);
             }
         }
