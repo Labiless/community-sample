@@ -13,9 +13,6 @@ const wss = new WebSocket.WebSocketServer({
     port
 });
 
-//start server
-//server.listen(port);
-
 //WEBSOCKET
 const allConncetion = {};
 wss.on('connection', (ws) => {
@@ -53,3 +50,5 @@ const performMessageAction = (message, ws) => {
             break;
     }
 }
+
+console.log("WS server running on " + port + " port");

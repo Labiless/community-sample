@@ -9,6 +9,9 @@ const wsm = webSocketManager();
 
 window.onload = async() => {
 
+    // getting app body 
+    const app = document.querySelector("#app");
+
     //websocket
     wsm.init();
 
@@ -20,9 +23,6 @@ window.onload = async() => {
     allSamples.forEach(sample => {
         sp.addSample(sample.split(".")[0], SAMPLE_ROOT+sample)
     });
-
-    // getting app body 
-    const app = document.querySelector("#app");
    
     const createPad = (sampleName) => {
         const btn = document.createElement("button");
