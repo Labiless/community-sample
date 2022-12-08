@@ -9,7 +9,7 @@ const app = express();
 app.use('/', express.static(__dirname ));
 
 app.get(`/`, function (req, res) {
-    res.redirect(`/home`);
+    res.redirect(`/visual`);
 });
 
 pages.forEach(page => {
