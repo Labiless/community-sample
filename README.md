@@ -2,6 +2,7 @@
 
 Directory system:
 
+<pre>
 dist\
 |_pageName\
     |_index.html\
@@ -15,6 +16,7 @@ src\
     |_index.js\
     |_style.css\
 server\
+</pre>
 
 ## JS
 You can improt js from any directory
