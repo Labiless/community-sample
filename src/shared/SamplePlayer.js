@@ -5,10 +5,10 @@ const SamplePlayer = () => ({
 
     },
     addSample : function(sampleName, url){
-        this.samples[sampleName] = new Audio(url);
+        this.samples[sampleName] = url;
     }, 
     play : function(sampleName){
-        this.samples[sampleName].play();
+        new Audio(this.samples[sampleName]).play();
     }
 
 });

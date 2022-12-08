@@ -18,6 +18,14 @@ pages.forEach(page => {
     });
 });
 
+// api
+// return samples file name from sample static folder
+app.get(`/api/samplelist`, function (req, res) {
+    const allSample = {samples : fs.readdirSync(path.join(__dirname, '/static/sample'))};
+    res.send(JSON.stringify(allSample));
+});
+
+//start
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
   console.log(`http://localhost:${port}`);
