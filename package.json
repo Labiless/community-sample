@@ -6,10 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "npm run build && node server.js && node ws-server.js",
-    "serve": "npm run build && node server.js",
-    "server": "node server.js",
-    "ws-server": "node ws-server.js"
+    "start": "npm run build && npm run server",
+    "server": "node server/server.js"
   },
   "author": "",
   "license": "ISC",
