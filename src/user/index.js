@@ -1,4 +1,4 @@
-import webSocketManager from "../../static/WebSocketManager";
+import webSocketManager from "../shared/WebSocketManager";
 
 const wss = webSocketManager();
 wss.init({
