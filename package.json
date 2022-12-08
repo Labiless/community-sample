@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "npm run build && node server.js",
-    "server": "node server.js"
+    "start": "npm run build && node server.js && node ws-server.js",
+    "serve": "npm run build && node server.js",
+    "server": "node server.js",
+    "ws-server": "node ws-server.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +23,8 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^9.0.0",
+    "ws": "^8.11.0"
   }
 }
