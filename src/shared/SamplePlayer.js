@@ -4,12 +4,12 @@ const SamplePlayer = () => ({
     init : function(data){
 
     },
-    addSample : (name, url) => {
-        samples[name] = {
-            audio : new Audio(url),
-            play : this.audio.play()
-        }
-    } 
+    addSample : function(sampleName, url){
+        this.samples[sampleName] = new Audio(url);
+    }, 
+    play : function(sampleName){
+        this.samples[sampleName].play();
+    }
 
 });
 
