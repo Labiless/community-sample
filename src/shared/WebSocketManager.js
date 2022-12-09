@@ -21,14 +21,10 @@ const webSocketManager = ()=>({
         this.socket = new WebSocket(this.url);
         this.socket.onopen = () => {
             console.log("Opening WS connection...")
-            this.onOpen();
+            this.onOpen(data?.onOpen);
         }
         this.socket.onmessage = (message) => {
-            const parsedMessage = JSON.parse(message.data)
-            this.onMessage(parsedMessage);
-            if(data?.onMessage){
-                data.onMessage(parsedMessage);
-            }
+            data.onMessage(message, data?.onMessage);
         }
         this.socket.onerror = (e) => {
             console.log(e);
@@ -38,13 +34,17 @@ const webSocketManager = ()=>({
             this.onClose();
         }
     },
-    onOpen : function(){
-        this.sendMessage({code:"openConnection", body : this.id});
-        console.log("Connection OPEN");
+    onOpen : function(onOpen){
+        if(onOpen){
+            onOpen();
+        }
         this.ready = true;
+        console.log("Connection OPEN");
     },
-    onMessage : function(message){
-        console.log(message);
+    onMessage : function(message, onMessage){
+        if(onMessage){
+            onMessage(message);
+        }
     },
     onError : function(){
 
@@ -53,12 +53,7 @@ const webSocketManager = ()=>({
         this.sendMessage("closeConnection",this.id);
     },
     sendMessage : function(message){
-        const readyInterval = setInterval(() => {
-            if(this.ready){
-                this.socket.send(JSON.stringify(message));
-                clearInterval(readyInterval);
-            }
-        }, 500);
+        this.socket.send(message);
     }
 });
 

@@ -10,15 +10,19 @@ const wsm = webSocketManager();
 window.onload = async() => {
 
     //websocket
-    wsm.init();
+    wsm.init({
+        onOpen : () => {wsm.sendMessage("a")},  // store visual ws,
+        onMessage : (message) => {console.log(message);sp.play(message.data)}
+    });
 
     // fetchin samples and create sample in sp player
     const allSamples = await fetch("http://localhost:3000/api/samplelist")
     .then(res => res.json())
     .then(data => data.samples);
 
-    allSamples.forEach(sample => {
-        sp.addSample(sample.split(".")[0], SAMPLE_ROOT+sample)
+    const charCode = "abcdefghijklmonpqrstuvwxyz"
+    allSamples.forEach((sample,i) => {
+        sp.addSample(charCode[i], SAMPLE_ROOT+sample)
     });
 
     // getting app body 

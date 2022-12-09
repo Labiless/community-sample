@@ -5,7 +5,7 @@ const allConncetion = {};
 
 const start = (server) => {
     wss = new WebSocket.WebSocketServer({ server });
-    wss.on('listening', ()=>{
+    wss.on('listening', () => {
         console.log("WS server runnig on port " + wss.address().port);
     });
     wss.on('connection', (ws) => {
@@ -15,37 +15,30 @@ const start = (server) => {
 }
 
 const onMessage = (message, ws) => {
-    performMessageAction(JSON.parse(message.toString()), ws);
+    messageParser(message, ws);
 }
 
 const sendMessage = (ws, message) => {
     try {
-        ws.send(JSON.stringify(message));
+        ws.send(message);
     } catch (error) {
         console.log("error send message")
     }
 }
 
-const performMessageAction = (message, ws) => {
-    switch (message.code) {
-        case "openConnection":
-            allConncetion[message.body] = ws;
-            console.log("connection extablish: " + message.body)
-            sendMessage(ws, { code: "openConnection", body: "connection extablish: " + message.body });
-            break;
-        case "test":
-            console.log("test message: " + message.body);
-            sendMessage(ws, { code: "test", body: "test message" })
-        case "keepAlive":
-            sendMessage(allConncetion["head"], JSON.stringify(message));
-            break;
-        case "closeConnection":
-            delete allConncetion[message];
-            console.log("delete the connection: " + message);
-            break;
-        default:
-            break;
+const messageParser = (message, ws) => {
+
+    const dictionary = {
+        97: () => { allConncetion["visual"] = ws }, // a
+        98: () => { sendMessage(allConncetion["visual"], "b") }, // b
+        99: () => { sendMessage(allConncetion["visual"], "c") }, // c
+        100: () => { sendMessage(allConncetion["visual"], "d") }, // d
+        101: () => { sendMessage(allConncetion["visual"], "e") }, // e
+        102: () => { sendMessage(allConncetion["visual"], "f") } // f
     }
+
+    dictionary[message[0]]();
+
 }
 
 module.exports = { start };
