@@ -7,39 +7,65 @@ const SAMPLE_ROOT = "./static/sample/"
 const sp = SamplePlayer();
 const wsm = webSocketManager();
 
-window.onload = async() => {
+window.onload = async () => {
 
     //websocket
     wsm.init({
-        onOpen : () => {wsm.sendMessage("a")},  // store visual ws,
-        onMessage : (message) => {console.log(message);sp.play(message.data)}
+        onOpen: () => { wsm.sendMessage(`0`); },  // store visual ws,
+        onMessage: (message) => { onMessage(message.data.split("-")) }
     });
+
+    //onmessage
+    const onMessage = (message) => {
+        console.log(message);
+        const dictionary = {
+            //code 1 => new user is connected 
+            49: () => {
+                console.log("new user");
+                app.appendChild(visualizeUser(message[1]));
+            },
+            //code 2 => new user is connected 
+            50: () => {
+                animateSample(message[1]);
+                sp.play(message[1]);
+            },
+        }
+        
+        dictionary[message[0]]()
+    }
 
     // fetchin samples and create sample in sp player
     const allSamples = await fetch("http://localhost:3000/api/samplelist")
-    .then(res => res.json())
-    .then(data => data.samples);
+        .then(res => res.json())
+        .then(data => data.samples);
 
-    const charCode = "abcdefghijklmonpqrstuvwxyz"
-    allSamples.forEach((sample,i) => {
-        sp.addSample(charCode[i], SAMPLE_ROOT+sample)
+    const charCode = "abcdefghijklmonpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    allSamples.forEach((sample, i) => {
+        sp.addSample(charCode[i].charCodeAt(0), SAMPLE_ROOT + sample)
     });
+    console.log(sp.samples);
 
+    //DOM MANIPULATION
     // getting app body 
     const app = document.querySelector("#app");
-   
-    const createPad = (sampleName) => {
-        const btn = document.createElement("button");
-        btn.classList.add("pad");
-        // btn.innerHTML = sampleName;
-        btn.onclick = () => {
-            sp.play(sampleName);
-        };
-        return btn;
+
+    let btn = document.createElement("button");
+    btn.onclick = () => {sp.play("97")};
+    app.appendChild(btn);
+
+    const visualizeUser = (code) => {
+        const div = document.createElement("div");
+        div.classList.add("user-feedback");
+        div.setAttribute("id", `sample-${code}`);
+        return div;
     }
 
-    Object.keys(sp.samples).forEach(sampleName => {
-        app.appendChild(createPad(sampleName));
-    })
+    const animateSample = (code) => {
+        const el = document.querySelector(`#sample-${code}`);
+        el.classList.add("user-feedback-animation");
+        setTimeout(() => {
+            el.classList.remove("user-feedback-animation");
+        }, 100);
+    }
 
 }
