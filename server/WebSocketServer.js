@@ -27,18 +27,19 @@ const sendMessage = (ws, message) => {
 }
 
 const messageParser = (message, ws) => {
-
     const dictionary = {
-        97: () => { allConncetion["visual"] = ws }, // a
-        98: () => { sendMessage(allConncetion["visual"], "b") }, // b
-        99: () => { sendMessage(allConncetion["visual"], "c") }, // c
-        100: () => { sendMessage(allConncetion["visual"], "d") }, // d
-        101: () => { sendMessage(allConncetion["visual"], "e") }, // e
-        102: () => { sendMessage(allConncetion["visual"], "f") } // f
+        //code 0 => visual is connected
+        48: () => {allConncetion["visual"] = ws},
+        //code 1 => new user is connected 
+        49: () => {
+            sendMessage(allConncetion["visual"], `${message[0]}-${message[1]}`) // message[1] is sample code
+        },
+        //code 2 => play sample
+        50: () => {
+            sendMessage(allConncetion["visual"], `${message[0]}-${message[1]}`) // message[1] is sample code
+        },
     }
-
     dictionary[message[0]]();
-
 }
 
 module.exports = { start };
