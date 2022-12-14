@@ -4,26 +4,30 @@ import webSocketManager from "../shared/WebSocketManager";
 const wsm = webSocketManager();
 
 window.onload = () =>{
-    
-    const charCode = "abcdefghijklmonpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const SAMPLE_NUM = 13;
-    const code = charCode[Math.trunc(Math.random()*SAMPLE_NUM)];
 
     wsm.init({
-        url: "ws://192.168.1.78:3000",
+        //url: "ws://192.168.1.78:3000",
         onOpen : () => {
-            createInterface(code);
-            wsm.sendMessage(`1${code}`);
+            wsm.sendMessage(`1`);
+        },
+        onMessage : (message) => {
+            createInterface(message.data);
         }
     });
 
-    const createInterface = (code)=> {
+    const createInterface = (sampleCode)=> {
         const app = document.querySelector("#app");
-        app.appendChild(createButton(code));
+        app.appendChild(createButton(sampleCode));
     }
-    const createButton = (code) => {
+    const createButton = (sampleCode) => {
         const btn = document.createElement("button");
-        btn.onclick = () => {wsm.sendMessage(`2${code}`)}
+        btn.onclick = (e) => {
+            e.target.classList.add("button-animation");
+            setTimeout(() => {
+                e.target.classList.remove("button-animation");
+            }, 100);
+            wsm.sendMessage(`2${sampleCode}`)
+        }
         return btn;
     }
 

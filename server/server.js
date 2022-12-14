@@ -11,7 +11,6 @@ app.use('/', express.static(process.cwd()));
 var http = require("http");
 var server = http.createServer(app);
 
-
 WebSocketServer.start(server);
 DistServer.start(app);
 

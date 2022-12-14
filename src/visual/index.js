@@ -17,14 +17,17 @@ window.onload = async () => {
 
     //onmessage
     const onMessage = (message) => {
-        console.log(message);
         const dictionary = {
             //code 1 => new user is connected 
             49: () => {
                 console.log("new user");
-                app.appendChild(visualizeUser(message[1]));
+                const userDiv = visualizeUser(message[1]);
+                usersContainer.appendChild(userDiv);
+                setTimeout(() => {
+                    userDiv.classList.add("show-user-feedback");
+                }, 100);
             },
-            //code 2 => new user is connected 
+            //code 2 => user is asking to play sample 
             50: () => {
                 animateSample(message[1]);
                 sp.play(message[1]);
@@ -43,29 +46,56 @@ window.onload = async () => {
     allSamples.forEach((sample, i) => {
         sp.addSample(charCode[i].charCodeAt(0), SAMPLE_ROOT + sample)
     });
-    console.log(sp.samples);
 
     //DOM MANIPULATION
     // getting app body 
     const app = document.querySelector("#app");
+    const usersContainer = document.querySelector("#users-container");
 
-    let btn = document.createElement("button");
-    btn.onclick = () => {sp.play("97")};
-    app.appendChild(btn);
+    const renderStartButton = () => {
+        const cover = document.createElement("div");
+        cover.classList.add("cover","flex");
+
+        const btn = document.createElement("button");
+        btn.innerHTML = "START";
+        btn.onclick = () => {
+            cover.classList.add("hide");
+            sp.play(97);
+        };
+
+        cover.appendChild(btn);
+        app.appendChild(cover);
+    }
 
     const visualizeUser = (code) => {
         const div = document.createElement("div");
-        div.classList.add("user-feedback");
+        div.classList.add("user-feedback",);
         div.setAttribute("id", `sample-${code}`);
         return div;
     }
 
     const animateSample = (code) => {
         const el = document.querySelector(`#sample-${code}`);
-        el.classList.add("user-feedback-animation");
+        const randomY = Math.trunc(Math.random()*10)
+        el.classList.add("user-feedback-animation", `color-${code}`);
         setTimeout(() => {
-            el.classList.remove("user-feedback-animation");
-        }, 100);
+            el.classList.remove("user-feedback-animation", `color-${code}`);
+        }, 400);
     }
 
+    const createColorClasses = () => {
+        const style = document.createElement("style");
+        Object.keys(sp.samples).forEach((code,i) => {
+            const color = `rgb(${Math.trunc(Math.random()*100)} ${Math.trunc(Math.random()*100)} ${Math.trunc(Math.random()*100)})`;
+            style.innerHTML += `
+            .color-${code}{
+                background-color: ${color} !important;    
+            }
+            `
+        });
+        return style;
+    }
+
+    renderStartButton();
+    document.body.appendChild(createColorClasses());
 }

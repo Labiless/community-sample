@@ -18,7 +18,7 @@ Object.keys(entry).forEach(key => {
     const htmlPlugin = new HtmlWebpackPlugin({
         filename: `${rootName}/index.html`,
         title: rootName,
-        template: "template.html",
+        template: `src/${rootName}/template.html`,
         chunks: [`dist/${rootName}/index.bundle.js`]
     });
     plugins.push(htmlPlugin);

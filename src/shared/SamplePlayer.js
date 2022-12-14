@@ -6,7 +6,6 @@ const SamplePlayer = () => ({
     },
     addSample : function(sampleName, url){
         this.samples[sampleName] = new Audio(url);
-        console.log(this.samples[sampleName]);
     }, 
     play : function(sampleName){
         setTimeout(() => {
@@ -15,7 +14,6 @@ const SamplePlayer = () => ({
         this.samples[sampleName].muted = true;
         this.samples[sampleName].currentTime = 0;
         this.samples[sampleName].play();
-
     }
 
 });
