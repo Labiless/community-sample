@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const root = process.cwd();
 
-let wss, amountOfSample;
+let wss, fixedAmountOfSample, amountOfSample;
 let allSampleCode = "abcdefghijklmonpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const allConncetion = {};
 
@@ -17,7 +17,8 @@ const start = (server) => {
         ws.on('message', (message) => onMessage(message, ws));
     });
 
-    amountOfSample = fs.readdirSync(path.join(root, '/static/sample')).length;
+    fixedAmountOfSample = fs.readdirSync(path.join(root, '/static/sample')).length;
+    amountOfSample = fixedAmountOfSample;
 }
 
 const onMessage = (message, ws) => {
@@ -40,9 +41,17 @@ const messageParser = (message, ws) => {
         return sampleCode;
     };
 
+    const resetSampleCode = () => {
+        allSampleCode = "abcdefghijklmonpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        amountOfSample = fixedAmountOfSample;
+    }
+
     const dictionary = {
         //code 0 => visual is connected
-        48: () => {allConncetion["visual"] = ws},
+        48: () => {
+            resetSampleCode();
+            allConncetion["visual"] = ws
+        },
         //code 1 => new user is connected 
         49: () => {
             if(amountOfSample > 0){

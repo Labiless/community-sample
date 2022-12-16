@@ -1,8 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const publicIp = require('public-ip');
-
-//console.log(publicIp.v4());
 
 const root = process.cwd();
 const pages = fs.readdirSync(path.join(root, '/dist'));
